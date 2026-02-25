@@ -26,4 +26,8 @@ Route::view('dashboard/orders', 'dashboard.orders')
     ->middleware(['auth', 'verified'])
     ->name('dashboard.orders');
 
+Route::view('dashboard/inventory', 'dashboard.inventory')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard.inventory');
+
 require __DIR__.'/settings.php';
