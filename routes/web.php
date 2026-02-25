@@ -34,4 +34,8 @@ Route::view('dashboard/manage-users', 'dashboard.manage-users')
     ->middleware(['auth', 'verified'])
     ->name('dashboard.manage-users');
 
+Route::view('dashboard/reports', 'dashboard.reports')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard.reports');
+
 require __DIR__.'/settings.php';
