@@ -30,4 +30,8 @@ Route::view('dashboard/inventory', 'dashboard.inventory')
     ->middleware(['auth', 'verified'])
     ->name('dashboard.inventory');
 
+Route::view('dashboard/manage-users', 'dashboard.manage-users')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard.manage-users');
+
 require __DIR__.'/settings.php';
