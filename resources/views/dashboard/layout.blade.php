@@ -42,18 +42,19 @@
               <span class="hidden md:block">Product</span>
             </a>
 
-            <!-- Ingredients Placeholder -->
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-[#5c4a3b] text-sm hover:bg-[#ebd9c8]/30 hover:text-[#8c5319] rounded-xl font-medium transition-colors border-r-4 border-transparent">
+            <!-- Ingredients -->
+            <a href="{{ route('dashboard.ingredients') }}" class="flex items-center gap-3 px-3 py-2 text-sm rounded-xl font-medium transition-colors {{ request()->routeIs('dashboard.ingredients') ? 'bg-[#ebd9c8]/50 text-[#8c5319] border-r-4 border-[#8c5319]' : 'text-[#5c4a3b] hover:bg-[#ebd9c8]/30 hover:text-[#8c5319] border-r-4 border-transparent' }}">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15m-6.75-12c.251.023.501.05.75.082M19.8 15a2.25 2.25 0 01.45 1.318c0 1.467-.757 2.747-1.887 3.457L6 21.75a3.375 3.375 0 01-3.75-5.59L5 14.5m14.8.5L19.8 15M5 14.5l-.75.75" />
               </svg>
               <span class="hidden md:block">Ingredients</span>
             </a>
 
-            <!-- Orders Placeholder -->
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-[#5c4a3b] text-sm hover:bg-[#ebd9c8]/30 hover:text-[#8c5319] rounded-xl font-medium transition-colors border-r-4 border-transparent">
+          
+            <!-- Orders -->
+            <a href="{{ route('dashboard.orders') }}" class="flex items-center gap-3 px-3 py-2 text-sm rounded-xl font-medium transition-colors {{ request()->routeIs('dashboard.orders') ? 'bg-[#ebd9c8]/50 text-[#8c5319] border-r-4 border-[#8c5319]' : 'text-[#5c4a3b] hover:bg-[#ebd9c8]/30 hover:text-[#8c5319] border-r-4 border-transparent' }}">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
               </svg>
               <span class="hidden md:block">Orders</span>
             </a>
