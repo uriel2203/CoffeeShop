@@ -39,7 +39,12 @@
                 <p class="text-xs md:text-sm text-[#5c4a3b] mt-1">Manage all raw materials and stock levels</p>
             </div>
             
-            <div class="flex items-center gap-4">
+            <div class="flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4">
+                <!-- Date & Time Filter -->
+                <div class="relative w-full md:w-auto">
+                    <input type="datetime-local" class="w-full bg-white/70 border border-[#dcc5ae] rounded-full py-2.5 px-4 text-sm focus:outline-none focus:border-[#8c5319] focus:ring-1 focus:ring-[#8c5319] text-[#5c4a3b] cursor-pointer" title="Filter by date and time">
+                </div>
+
                 <!-- 4.2 Search Bar to quickly filter the ingredient list by name -->
                 <div class="relative w-full md:w-64">
                     <input type="text" placeholder="Search for products..." class="w-full bg-white/70 border border-[#dcc5ae] rounded-full py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-[#8c5319] focus:ring-1 focus:ring-[#8c5319] placeholder:text-[#a08f80]">
