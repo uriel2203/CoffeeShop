@@ -14,4 +14,8 @@ Route::view('dashboard/menu', 'dashboard.menu')
     ->middleware(['auth', 'verified'])
     ->name('dashboard.menu');
 
+Route::view('dashboard/products', 'dashboard.products')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard.products');
+
 require __DIR__.'/settings.php';
