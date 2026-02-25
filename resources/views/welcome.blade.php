@@ -45,7 +45,7 @@
 <body class="bg-[#ebd9c8] text-[#2c221a] font-sans antialiased overflow-x-hidden selection:bg-[#9f6a27] selection:text-white">
 
     <!-- Navbar -->
-    <nav class="absolute top-0 w-full flex justify-between items-center px-8 py-6 z-50 text-white/90 bg-transparent border-b border-white/20">
+    <nav class="fixed top-0 w-full flex justify-between items-center px-8 py-4 z-50 text-white/90 bg-transparent border-b border-white/20">
         <div class="font-serif text-2xl font-bold tracking-widest text-[#e8c6a0]">
             CAFÉRA
         </div>
@@ -55,19 +55,23 @@
             <a href="#" class="hover:text-white transition-colors">About Us</a>
             <a href="#" class="hover:text-white transition-colors">Contact</a>
         </div>
-        <div class="flex items-center space-x-6">
+        <div class="flex items-center space-x-4">
             @if (Route::has('login'))
                 @auth
                     <a href="{{ url('/dashboard') }}" class="text-sm font-medium hover:text-white transition-colors">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="inline-block border border-white/20 hover:border-white/60 hover:bg-white/10 text-white text-sm font-semibold px-6 py-2 rounded-full transition-all duration-300">
+                    <a href="{{ route('login') }}" class="text-white text-sm font-semibold hover:text-white/80 transition-colors">
                         Log in
                     </a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="inline-block border border-white/20 hover:border-white/60 hover:bg-white/10 text-white text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300">
+                            Register
+                        </a>
+                    @endif
                 @endauth
             @else
-                <a href="/login" class="inline-block border border-white/20 hover:border-white/60 hover:bg-white/10 text-white text-sm font-semibold px-6 py-2 rounded-full transition-all duration-300">
-                    Log in
-                </a>
+                <a href="/login" class="text-white text-sm font-semibold hover:text-white/80 transition-colors">Log in</a>
+                <a href="/register" class="inline-block border border-white/20 hover:border-white/60 hover:bg-white/10 text-white text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300">Register</a>
             @endif
         </div>
     </nav>
