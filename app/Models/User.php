@@ -22,7 +22,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'username',
         'password',
+        'role',
     ];
 
     /**
@@ -60,5 +62,23 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    /**
+     * Check if the user has the 'admin' role.
+     * Used for restricting sensitive actions like user management and reports.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if the user has the 'employee' role.
+     * Used for basic dashboard access and POS operations.
+     */
+    public function isEmployee(): bool
+    {
+        return $this->role === 'employee';
     }
 }

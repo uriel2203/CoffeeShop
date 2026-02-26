@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title ?? 'Caféra' }}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS & JS (via Vite) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Livewire Styles -->
+    @livewireStyles
+
+    <!-- Custom Font Utilities -->
+    <style>
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
 <body class="bg-[#ebd9c8] text-[#2c221a] font-sans antialiased h-screen overflow-hidden flex selection:bg-[#9f6a27] selection:text-white">
 
     <!-- ========================================== -->
@@ -33,6 +57,8 @@
               <span class="hidden md:block">Menu</span>
             </a>
 
+            <!-- Admin & Employee: Products Area -->
+            @if(Auth::user()->isAdmin() || Auth::user()->isEmployee())
             <!-- Products -->
             <a href="{{ route('dashboard.products') }}" class="flex items-center gap-3 px-3 py-2 text-sm rounded-xl font-medium transition-colors {{ request()->routeIs('dashboard.products') ? 'bg-[#ebd9c8]/50 text-[#8c5319] border-r-4 border-[#8c5319]' : 'text-[#5c4a3b] hover:bg-[#ebd9c8]/30 hover:text-[#8c5319] border-r-4 border-transparent' }}">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
@@ -49,6 +75,7 @@
               </svg>
               <span class="hidden md:block">Ingredients</span>
             </a>
+            @endif
 
           
             <!-- Orders -->
@@ -59,6 +86,8 @@
               <span class="hidden md:block">Orders</span>
             </a>
 
+            <!-- Management & Reports -->
+            @if(Auth::user()->isAdmin() || Auth::user()->isEmployee())
             <!-- Inventory -->
             <a href="{{ route('dashboard.inventory') }}" class="flex items-center gap-3 px-3 py-2 text-sm rounded-xl font-medium transition-colors {{ request()->routeIs('dashboard.inventory') ? 'bg-[#ebd9c8]/50 text-[#8c5319] border-r-4 border-[#8c5319]' : 'text-[#5c4a3b] hover:bg-[#ebd9c8]/30 hover:text-[#8c5319] border-r-4 border-transparent' }}">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
@@ -67,13 +96,15 @@
               <span class="hidden md:block">Inventory</span>
             </a>
 
-            <!-- Manage Users -->
+            <!-- Manage Users (Admin Only) -->
+            @if(Auth::user()->isAdmin())
             <a href="{{ route('dashboard.manage-users') }}" class="flex items-center gap-3 px-3 py-2 text-sm rounded-xl font-medium transition-colors {{ request()->routeIs('dashboard.manage-users') ? 'bg-[#ebd9c8]/50 text-[#8c5319] border-r-4 border-[#8c5319]' : 'text-[#5c4a3b] hover:bg-[#ebd9c8]/30 hover:text-[#8c5319] border-r-4 border-transparent' }}">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
               </svg>
               <span class="hidden md:block">Manage Users</span>
             </a>
+            @endif
 
             <!-- Reports -->
             <a href="{{ route('dashboard.reports') }}" class="flex items-center gap-3 px-3 py-2 text-sm rounded-xl font-medium transition-colors {{ request()->routeIs('dashboard.reports') ? 'bg-[#ebd9c8]/50 text-[#8c5319] border-r-4 border-[#8c5319]' : 'text-[#5c4a3b] hover:bg-[#ebd9c8]/30 hover:text-[#8c5319] border-r-4 border-transparent' }}">
@@ -82,6 +113,7 @@
               </svg>
               <span class="hidden md:block">Reports</span>
             </a>
+            @endif
             
         </nav>
 
@@ -101,6 +133,10 @@
     </aside>
 
     <!-- CONTENT INJECTED HERE -->
-    @yield('content')
+    {{ $slot }}
 
+    <!-- Livewire Scripts -->
+    @livewireScripts
 </body>
+</html>
+

@@ -26,8 +26,9 @@ This project completely replaces the default Laravel welcome view (`welcome.blad
 ## Tech Stack
 
 *   **Framework**: [Laravel 11.x](https://laravel.com)
+*   **Interactivity (Real-time)**: [Livewire 4.x](https://livewire.laravel.com)
 *   **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com) (via Vite)
-*   **Interactivity**: Vanilla JavaScript (Intersection Observer API)
+*   **Interactivity (Animations)**: Vanilla JavaScript (Intersection Observer API)
 *   **Fonts**: Google Fonts (Playfair Display, Inter)
 
 ## Installation & Setup
@@ -76,6 +77,7 @@ This project uses Laravel with Vite and Tailwind CSS. Ensure you have PHP, Compo
 ## Project Structure (Key Files)
 
 *   `resources/views/welcome.blade.php`: **This is the core of the project.** It contains the entire HTML structure, Tailwind utility classes for styling, embedded Google Fonts, and the inline JavaScript for the Intersection Observer animations.
+*   `LIVEWIRE_INTEGRATION.md`: **Technical reference** for how Livewire was integrated into the dashboard views and components.
 *   `package.json` & `vite.config.js`: Configuration for managing frontend assets (Tailwind CSS) via Vite.
 
 ## Customizing Animations

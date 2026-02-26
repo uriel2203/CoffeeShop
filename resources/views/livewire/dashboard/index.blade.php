@@ -1,0 +1,134 @@
+<div class="flex-1 flex overflow-hidden w-full">
+    {{--
+        Livewire Dashboard Index Component
+        Displays real-time summary, analytics, and stock status.
+    --}}
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-transparent p-6 md:p-8">
+        
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="font-serif text-2xl md:text-3xl font-bold text-[#2a241f]">Dashboard</h1>
+            <p class="text-sm text-[#5c4a3b] mt-1">Real-time summary, analytics, and stock status</p>
+        </header>
+
+        <!-- Today's Sales Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Total Sales -->
+            <div class="bg-white/70 rounded-2xl p-6 border border-[#dcc5ae] shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <p class="text-xs font-bold text-[#8a7663] uppercase tracking-wider mb-1">Today's Total Sales</p>
+                    <h3 class="font-serif text-2xl font-bold text-[#8c5319]">₱{{ number_format($totalSales, 2) }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-[#ebd9c8] flex items-center justify-center text-[#8c5319]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Total Products Sold -->
+            <div class="bg-white/70 rounded-2xl p-6 border border-[#dcc5ae] shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <p class="text-xs font-bold text-[#8a7663] uppercase tracking-wider mb-1">Total Products Sold</p>
+                    <h3 class="font-serif text-2xl font-bold text-[#8c5319]">{{ $productsSold }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-[#ebd9c8] flex items-center justify-center text-[#8c5319]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Number of Orders -->
+            <div class="bg-white/70 rounded-2xl p-6 border border-[#dcc5ae] shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <p class="text-xs font-bold text-[#8a7663] uppercase tracking-wider mb-1">Number of Orders</p>
+                    <h3 class="font-serif text-2xl font-bold text-[#8c5319]">{{ $orderCount }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-[#ebd9c8] flex items-center justify-center text-[#8c5319]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    </svg>
+                </div>
+             </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8">
+            <!-- Sales Analytics Chart -->
+            <div class="lg:col-span-2 bg-white/70 rounded-2xl p-6 border border-[#dcc5ae] shadow-xs flex flex-col">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                    <h2 class="font-serif font-bold text-lg text-[#2a241f]">Sales Analytics</h2>
+                    <!-- Filters -->
+                    <div class="flex bg-white border border-[#dcc5ae] rounded-lg overflow-hidden text-xs font-medium">
+                        @foreach(['Daily', 'Weekly', 'Monthly', 'Yearly'] as $filter)
+                            <button 
+                                wire:click="$set('timeFilter', '{{ $filter }}')"
+                                @class([
+                                    'px-3 py-1.5 transition-colors',
+                                    'bg-[#8c5319] text-white' => $timeFilter === $filter,
+                                    'text-[#8a7663] hover:bg-[#ebd9c8]/30' => $timeFilter !== $filter,
+                                    'border-l border-[#dcc5ae]' => !$loop->first
+                                ])
+                            >
+                                {{ $filter }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+                
+                <div class="flex-1 w-full relative min-h-[250px] flex items-end justify-between gap-2 md:gap-4 px-2 mt-auto border-b border-[#ebd9c8] pb-1">
+                    @foreach($this->analyticsData as $item)
+                        <div 
+                            style="height: {{ $item['height'] }}"
+                            @class([
+                                'w-1/12 rounded-t-md transition-colors relative group',
+                                'bg-[#8c5319] hover:bg-[#a66a2a]' => $item['value'] > 800,
+                                'bg-[#ebd9c8] hover:bg-[#8c5319]' => $item['value'] <= 800
+                            ])
+                        >
+                            <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#2a241f] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                ₱{{ number_format($item['value']) }}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Stock Status Indicator -->
+            <div class="bg-white/70 rounded-2xl p-6 border border-[#dcc5ae] shadow-xs flex flex-col">
+                <h2 class="font-serif font-bold text-lg text-[#2a241f] mb-4">Stock Status</h2>
+                <div class="space-y-4 flex-1 overflow-y-auto pr-2">
+                    @foreach($this->stockStatus as $item)
+                        <div @class([
+                            'flex items-center justify-between p-3 border rounded-xl hover:shadow-sm transition-shadow',
+                            'border-red-200 bg-red-50' => $item['color'] === 'red',
+                            'border-yellow-200 bg-yellow-50' => $item['color'] === 'yellow',
+                            'border-blue-200 bg-blue-50' => $item['color'] === 'blue',
+                        ])>
+                            <div class="flex items-center gap-3">
+                                <div @class([
+                                    'w-3 h-3 rounded-full',
+                                    'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' => $item['color'] === 'red',
+                                    'bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]' => $item['color'] === 'yellow',
+                                    'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]' => $item['color'] === 'blue',
+                                ])></div>
+                                <div>
+                                    <p class="text-sm font-bold text-[#2a241f]">{{ $item['name'] }}</p>
+                                    <p @class([
+                                        'text-[0.65rem] font-medium tracking-wide',
+                                        'text-red-600' => $item['color'] === 'red',
+                                        'text-yellow-600' => $item['color'] === 'yellow',
+                                        'text-blue-600' => $item['color'] === 'blue',
+                                    ])>
+                                        {{ $item['note'] }}
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-[#2a241f]">{{ $item['quantity'] }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

@@ -45,7 +45,8 @@ return [
     |
     */
 
-    'username' => 'email',
+    // Set 'username' as the primary login credential for the application
+    'username' => 'username',
 
     'email' => 'email',
 
