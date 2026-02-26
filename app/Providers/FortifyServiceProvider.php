@@ -29,6 +29,21 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();
+
+        // Custom authentication logic: Use username and check status
+        Fortify::authenticateUsing(function ($request) {
+            $user = \App\Models\User::where('username', $request->username)->first();
+
+            if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+                // Check if account is active
+                if (!$user->status) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'username' => [__('This account is inactive. Please contact your administrator.')],
+                    ]);
+                }
+                return $user;
+            }
+        });
     }
 
     /**
