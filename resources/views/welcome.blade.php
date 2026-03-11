@@ -442,56 +442,7 @@
         </div>
     </section>
 
-    <!-- 7. Testimonials Section -->
-    <section class="py-24 px-8 lg:px-24 bg-[#e8d5c4]">
-        <div class="max-w-7xl mx-auto flex flex-col items-center">
-            <h2 class="font-serif text-4xl mb-4 text-[#2a241f] font-bold text-center reveal">Loved by Coffee Lovers</h2>
-            <p class="text-sm text-[#5c4a3b] mb-20 text-center reveal delay-100">Crafted with care. Rated highly by real coffee drinkers.</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full mb-16">
-                <!-- Review 1 -->
-                <div class="bg-[#f0e4d7] p-8 pt-12 rounded-xl text-center relative shadow-sm reveal border border-[#d8beaa]">
-                    <!-- Avatar overflow top -->
-                    <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-[#e8d5c4] overflow-hidden bg-[#e3cdb9]">
-                        <img src="https://loremflickr.com/200/200/woman,smiling,face/all?random=1" class="w-full h-full object-cover" alt="Sara">
-                    </div>
-                    <h4 class="font-bold text-sm text-[#2a241f] mb-4">Sara Jones</h4>
-                    <p class="text-[#5c4a3b] text-sm italic mb-6">"The smoothest cold brew I've had — rich, bold flavor without any bitterness. Perfect for everyday sipping."</p>
-                    <div class="flex justify-center text-[#d4af37] mb-2 text-lg">★★★★★</div>
-                    <p class="text-[0.65rem] uppercase tracking-wider text-[#5c4a3b]">Verified Customer</p>
-                </div>
-
-                <!-- Review 2 -->
-                <div class="bg-[#f0e4d7] p-8 pt-12 rounded-xl text-center relative shadow-sm reveal delay-100 border border-[#d8beaa]">
-                    <!-- Avatar overflow top -->
-                    <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-[#e8d5c4] overflow-hidden bg-[#e3cdb9]">
-                        <img src="https://loremflickr.com/200/200/man,smiling,face/all?random=2" class="w-full h-full object-cover" alt="Michael">
-                    </div>
-                    <h4 class="font-bold text-sm text-[#2a241f] mb-4">Michael Lee</h4>
-                    <p class="text-[#5c4a3b] text-sm italic mb-6">"Clean, refreshing, and incredibly balanced. You can really taste the quality of the beans in every sip."</p>
-                    <div class="flex justify-center text-[#d4af37] mb-2 text-lg">★★★★★</div>
-                    <p class="text-[0.65rem] uppercase tracking-wider text-[#5c4a3b]">Verified Customer</p>
-                </div>
-
-                <!-- Review 3 -->
-                <div class="bg-[#f0e4d7] p-8 pt-12 rounded-xl text-center relative shadow-sm reveal delay-200 border border-[#d8beaa]">
-                    <!-- Avatar overflow top -->
-                    <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-[#e8d5c4] overflow-hidden bg-[#e3cdb9]">
-                        <img src="https://loremflickr.com/200/200/woman,smiling,face/all?random=3" class="w-full h-full object-cover" alt="Emily">
-                    </div>
-                    <h4 class="font-bold text-sm text-[#2a241f] mb-4">Emily Carter</h4>
-                    <p class="text-[#5c4a3b] text-sm italic mb-6">"Absolutely love it. Smooth, strong, and not acidic at all. This has become my go-to cold brew."</p>
-                    <div class="flex justify-center text-[#d4af37] mb-2 text-lg">★★★★★</div>
-                    <p class="text-[0.65rem] uppercase tracking-wider text-[#5c4a3b]">Verified Customer</p>
-                </div>
-            </div>
-
-            <!-- Read More Reviews Button -->
-            <button class="border border-[#b79b83] text-[#5c4a3b] font-semibold text-xs px-8 py-2.5 rounded-md hover:bg-[#b79b83] hover:text-white transition-colors reveal delay-300">
-                Read More Reviews
-            </button>
-        </div>
-    </section>
+   
 
     <!-- 8. Newsletter & Features Banner -->
     <section class="py-24 px-8 lg:px-24 bg-[#ebd9c8]">

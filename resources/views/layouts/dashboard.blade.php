@@ -29,13 +29,26 @@
     <!-- ========================================== -->
     <aside class="w-16 md:w-56 bg-white/60 h-full flex flex-col justify-between border-r border-[#dcc5ae] flex-shrink-0 transition-all duration-300">
         
-        <!-- Logo Area -->
-        <div class="p-6 md:p-8 flex items-center justify-center md:justify-start">
+        <!-- Logo Area & Manage Account Link -->
+        <div class="px-3 md:px-6 pt-6 md:pt-8 pb-4 flex flex-col items-center md:items-start border-b border-[#dcc5ae]/30 mb-2">
             <!-- Brand Mark / Name -->
-            <div class="font-serif text-xl md:text-2xl font-bold tracking-widest text-[#8c5319]">
-                <span class="md:hidden">C</span>
-                <span class="hidden md:inline">CAFÉRA</span>
+            <div class="flex items-center gap-3">
+                <img src="{{ asset('images/logo.png') }}" alt="Dashboard Logo" class="w-10 h-10 md:w-12 md:h-12 object-contain rounded-full shadow-sm border border-[#dcc5ae] bg-white">
+                <div class="font-serif text-xl md:text-2xl font-bold tracking-widest text-[#8c5319]">
+                    <span class="hidden md:inline">CAFÉRA</span>
+                </div>
             </div>
+            
+            <!-- Manage Account Link (Small & Subtile) -->
+            <a href="{{ route('profile.edit') }}" class="group mt-3 flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#ebd9c8]/40 transition-all duration-200">
+                <div class="p-1 rounded-md bg-[#ebd9c8]/20 group-hover:bg-[#8c5319]/10 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 text-[#8c5319]/70 group-hover:text-[#8c5319]">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.114-.94h1.086c.554 0 1.024.398 1.114.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.122l.768.768a1.125 1.125 0 01.122 1.45l-.527.737c-.25.35-.272.807-.107 1.205.166.397.506.71.93.78l.894.15c.542.09.94.56.94 1.114v1.086c0 .554-.398 1.024-.94 1.114l-.894.149c-.424.07-.764.383-.93.78-.165.398-.143.854.107 1.205l.527.738a1.125 1.125 0 01-.122 1.45l-.768.768a1.125 1.125 0 01-1.45.122l-.737-.527c-.35-.25-.807-.272-1.205-.107-.397.165-.71.505-.78.93l-.15.894c-.09.542-.56.94-1.114.94h-1.086c-.554 0-1.024-.398-1.114-.94l-.149-.894c-.07-.424-.383-.764-.78-.93-.398-.164-.854-.142-1.205.108l-.738.527a1.125 1.125 0 01-1.45-.122l-.768-.768a1.125 1.125 0 01-.122-1.45l.527-.737c.25-.35.272-.807.108-1.205-.165-.397-.505-.71-.93-.78l-.894-.15a1.125 1.125 0 01-.94-1.114v-1.086c0-.554.398-1.024.94-1.114l.894-.149c.424-.07.764-.383.93-.78.165-.398.143-.854-.108-1.205l-.527-.738a1.125 1.125 0 01.122-1.45l.768-.768a1.125 1.125 0 011.45-.122l.737.527c.35.25.807.272 1.205.107.397-.165.71-.505.78-.93l.15-.894z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <span class="hidden md:block text-[0.65rem] font-bold text-[#8a7663] group-hover:text-[#8c5319] transition-colors uppercase tracking-tight">Manage Account</span>
+            </a>
         </div>
 
         <!-- Navigation Links -->
@@ -122,7 +135,7 @@
              <form method="POST" action="{{ route('logout') }}" x-data>
                 @csrf
                 <button type="submit" class="flex items-center gap-3 w-full hover:bg-[#ebd9c8]/30 p-2 rounded-xl transition-colors">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Demo User') }}&background=8c5319&color=fff" alt="User Avatar" class="w-8 h-8 rounded-full border border-[#dcc5ae]">
+                    <img src="{{ Auth::user()->profile_photo_url }}" alt="User Avatar" class="w-8 h-8 rounded-full border border-[#dcc5ae] object-cover">
                     <div class="hidden md:block text-left truncate flex-1">
                         <p class="text-[0.7rem] font-bold text-[#2a241f] truncate">{{ Auth::user()->name ?? 'Demo User' }}</p>
                         <p class="text-[0.6rem] text-[#8c5319]">Logout</p>

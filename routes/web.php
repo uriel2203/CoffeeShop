@@ -7,7 +7,7 @@ Route::get('/', function () {
 })->name('home');
 
 // Dashboard Routes protected by Auth and Role-Based Access Control (RBAC)
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'prevent-back-history'])->group(function () {
     
     // Core Dashboard pages accessible to all authenticated staff
     Route::get('dashboard', \App\Livewire\Dashboard\Index::class)->name('dashboard');

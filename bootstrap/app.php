@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // This allows us to use it in routes like ->middleware(['role:admin'])
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

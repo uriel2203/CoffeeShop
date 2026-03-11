@@ -98,9 +98,13 @@
                                     <td class="px-6 py-5 text-[0.7rem] font-bold text-[#8a7663]">#{{ $user->id }}</td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-2xl bg-[#fcf8f4] border border-[#ebd9c8] text-[#8c5319] flex items-center justify-center font-black text-xs shadow-sm transform group-hover:rotate-3 transition-transform">
-                                                {{ $user->initials() }}
-                                            </div>
+                                            @if($user->profile_photo_path)
+                                                <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-10 h-10 rounded-2xl object-cover border border-[#ebd9c8] shadow-sm transform group-hover:rotate-3 transition-transform">
+                                            @else
+                                                <div class="w-10 h-10 rounded-2xl bg-[#fcf8f4] border border-[#ebd9c8] text-[#8c5319] flex items-center justify-center font-black text-xs shadow-sm transform group-hover:rotate-3 transition-transform">
+                                                    {{ $user->initials() }}
+                                                </div>
+                                            @endif
                                             <div>
                                                 <div class="text-[0.75rem] font-black text-[#2a241f] leading-tight">{{ $user->name }}</div>
                                                 <div class="text-[0.6rem] text-[#8c5319] font-bold uppercase tracking-tighter">{{ $user->email }}</div>

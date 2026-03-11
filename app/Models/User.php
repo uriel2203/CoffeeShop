@@ -26,6 +26,7 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'profile_photo_path',
     ];
 
     /**
@@ -82,5 +83,15 @@ class User extends Authenticatable
     public function isEmployee(): bool
     {
         return $this->role === 'employee';
+    }
+
+    /**
+     * Get the URL to the user's profile photo.
+     */
+    public function getProfilePhotoUrlAttribute(): string
+    {
+        return $this->profile_photo_path
+            ? asset('storage/' . $this->profile_photo_path)
+            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=8c5319&color=fff';
     }
 }
