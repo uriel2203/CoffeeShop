@@ -22,6 +22,7 @@ class Products extends Component
     public $productId = null;
     public $name = '';
     public $category = '';
+    public $description = '';
     public $price = '';
     public $is_available = true;
     public $image;
@@ -63,6 +64,7 @@ class Products extends Component
         $this->productId = $product->id;
         $this->name = $product->name;
         $this->category = $product->category;
+        $this->description = $product->description;
         $this->price = $product->price;
         $this->is_available = $product->is_available;
         $this->existingImage = $product->image_path;
@@ -121,6 +123,7 @@ class Products extends Component
             $this->validate([
                 'name' => 'required|string|max:255|unique:products,name,' . $this->productId,
                 'category' => 'required|string|max:255',
+                'description' => 'nullable|string|max:1000',
                 'price' => 'required|numeric|min:0',
                 'image' => 'nullable|image|max:2048', // 2MB Max
                 'selectedIngredients' => 'required|array|min:1',
@@ -141,32 +144,17 @@ class Products extends Component
             }
 
             \Illuminate\Support\Facades\DB::transaction(function () use ($imagePath) {
-                // 1. Validate Stock Availability (Only for NEW products)
-                if (!$this->productId) {
-                    foreach ($this->selectedIngredients as $item) {
-                        $ingredient = Ingredient::find($item['id']);
-                        if ($ingredient->amount < $item['amount']) {
-                            throw new \Exception("Insufficient stock for {$ingredient->name}. Need {$item['amount']}, have {$ingredient->amount}.");
-                        }
-                    }
-                    
-                    // 2. Deduct stock
-                    foreach ($this->selectedIngredients as $item) {
-                        $ingredient = Ingredient::find($item['id']);
-                        $ingredient->decrement('amount', $item['amount']);
-                    }
-                }
-
-                // 3. Save Product
+                // Save Product
                 $product = Product::updateOrCreate(['id' => $this->productId], [
                     'name' => $this->name,
                     'category' => $this->category,
+                    'description' => $this->description,
                     'price' => $this->price,
                     'is_available' => $this->is_available,
                     'image_path' => $imagePath,
                 ]);
 
-                // 4. Sync ingredients
+                // Sync ingredients
                 $syncData = [];
                 foreach ($this->selectedIngredients as $item) {
                     $ingredientId = $item['id'];
@@ -180,7 +168,7 @@ class Products extends Component
 
             $this->showModal = false;
             $this->resetForm();
-            session()->flash('message', 'Product saved and inventory updated successfully.');
+            session()->flash('message', 'Product saved successfully.');
         } catch (\Exception $e) {
             session()->flash('recipe_error', $e->getMessage());
         }
@@ -211,6 +199,7 @@ class Products extends Component
         $this->productId = null;
         $this->name = '';
         $this->category = '';
+        $this->description = '';
         $this->price = '';
         $this->is_available = true;
         $this->image = null;

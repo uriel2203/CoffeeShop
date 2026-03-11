@@ -15,6 +15,8 @@ class Ingredient extends Model
         'category',
         'amount',
         'unit',
+        'low_stock_threshold',
+        'critical_stock_threshold',
     ];
 
     /**

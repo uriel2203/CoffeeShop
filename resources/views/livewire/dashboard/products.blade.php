@@ -54,7 +54,7 @@
         </header>
 
         <!-- Product Grid -->
-        <div class="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar bg-[#fdfaf7]/50">
+        <div class="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar bg-white/30">
             @if(session()->has('message'))
                 <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-2xl text-sm flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
@@ -134,9 +134,43 @@
                 @endforelse
             </div>
 
+            <!-- Professional Pagination -->
             @if($products->hasPages())
-                <div class="mt-8 pt-6 border-t border-[#ebd9c8]">
-                    {{ $products->links() }}
+                <div class="mt-8 px-6 py-4 bg-[#fcf8f4] border-t border-[#ebd9c8] rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                    <div class="text-[0.65rem] font-bold text-[#8a7663] uppercase tracking-wide bg-white px-3 py-1.5 rounded-full border border-[#dcc5ae]">
+                        Showing <span class="text-[#8c5319]">{{ $products->firstItem() ?? 0 }}</span> to <span class="text-[#8c5319]">{{ $products->lastItem() ?? 0 }}</span> of <span class="text-[#8c5319]">{{ $products->total() }}</span> entries
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        @if ($products->onFirstPage())
+                            <span class="px-4 py-2 text-[0.65rem] font-black text-[#a08f80] bg-[#f5ede4] rounded-lg cursor-not-allowed uppercase tracking-widest border border-transparent opacity-60">Previous</span>
+                        @else
+                            <button 
+                                wire:click="previousPage" 
+                                wire:loading.attr="disabled"
+                                class="px-4 py-2 text-[0.65rem] font-black text-[#8c5319] bg-white border border-[#dcc5ae] rounded-lg hover:bg-[#8c5319] hover:text-white hover:border-[#8c5319] transition-all duration-200 uppercase tracking-widest shadow-sm">
+                                Previous
+                            </button>
+                        @endif
+
+                        <div class="flex items-center gap-1 mx-2">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-[#8c5319] text-white text-[0.7rem] font-black shadow-md shadow-[#8c5319]/20">
+                                {{ $products->currentPage() }}
+                            </span>
+                            <span class="text-[0.7rem] font-bold text-[#8a7663]">of {{ $products->lastPage() }}</span>
+                        </div>
+
+                        @if ($products->hasMorePages())
+                            <button 
+                                wire:click="nextPage" 
+                                wire:loading.attr="disabled"
+                                class="px-4 py-2 text-[0.65rem] font-black text-[#8c5319] bg-white border border-[#dcc5ae] rounded-lg hover:bg-[#8c5319] hover:text-white hover:border-[#8c5319] transition-all duration-200 uppercase tracking-widest shadow-sm">
+                                Next
+                            </button>
+                        @else
+                            <span class="px-4 py-2 text-[0.65rem] font-black text-[#a08f80] bg-[#f5ede4] rounded-lg cursor-not-allowed uppercase tracking-widest border border-transparent opacity-60">Next</span>
+                        @endif
+                    </div>
                 </div>
             @endif
         </div>
@@ -186,7 +220,13 @@
                                             @error('category') <span class="text-[0.65rem] text-red-500 font-medium px-1">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="space-y-1">
+                                        <div class="space-y-1 col-span-2">
+                                            <label class="text-[0.65rem] font-bold text-[#8a7663] uppercase tracking-wide px-1">Description</label>
+                                            <textarea wire:model="description" rows="2" placeholder="Describe the flavor, roast, or notes..." class="w-full bg-white border border-[#dcc5ae] rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-[#8c5319] focus:ring-1 focus:ring-[#8c5319] placeholder:text-[#a08f80] resize-none"></textarea>
+                                            @error('description') <span class="text-[0.65rem] text-red-500 font-medium px-1">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="space-y-1 col-span-2">
                                             <label class="text-[0.65rem] font-bold text-[#8a7663] uppercase tracking-wide px-1">Price (₱)</label>
                                             <input type="number" step="0.01" wire:model="price" placeholder="0.00" class="w-full bg-white border border-[#dcc5ae] rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-[#8c5319] focus:ring-1 focus:ring-[#8c5319]">
                                             @error('price') <span class="text-[0.65rem] text-red-500 font-medium px-1">{{ $message }}</span> @enderror

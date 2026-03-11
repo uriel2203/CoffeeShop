@@ -79,76 +79,132 @@
                 </div>
             @endif
 
-            <div class="bg-white rounded-2xl border border-[#dcc5ae] shadow-sm overflow-hidden min-w-[800px] md:min-w-0">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-[#fcf8f4] border-b border-[#ebd9c8]">
-                        <tr>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">User</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Username</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Role</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider text-center">Status</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-[#f5ede4]">
-                        @forelse ($users as $user)
-                            <tr class="hover:bg-[#fcf8f4]/50 transition-colors" wire:key="user-{{ $user->id }}">
-                                <td class="px-6 py-4 text-sm text-[#8a7663]">#{{ $user->id }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full bg-[#ebd9c8] text-[#8c5319] flex items-center justify-center font-bold text-sm">
-                                            {{ $user->initials() }}
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-semibold text-[#2c221a]">{{ $user->name }}</div>
-                                            <div class="text-xs text-[#a08f80]">{{ $user->email }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-[#5c4a3b]">{{ $user->username }}</td>
-                                <td class="px-6 py-4 text-sm">
-                                    <span class="px-2.5 py-1 rounded-full text-[0.7rem] font-bold uppercase tracking-wide {{ $user->role === 'admin' ? 'bg-[#9f6a27]/10 text-[#9f6a27]' : 'bg-slate-100 text-slate-500' }}">
-                                        {{ $user->role }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <button 
-                                        wire:click.stop="toggleStatus({{ $user->id }})"
-                                        wire:loading.attr="disabled"
-                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.7rem] font-bold uppercase tracking-wide transition-all border {{ $user->status == 1 ? 'bg-green-50 text-green-600 border-green-200' : 'bg-red-50 text-red-600 border-red-200' }} disabled:opacity-50">
-                                        <div class="w-1.5 h-1.5 rounded-full {{ $user->status == 1 ? 'bg-green-500' : 'bg-red-500' }}"></div>
-                                        {{ $user->status == 1 ? 'Active' : 'Inactive' }}
-                                    </button>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button 
-                                        wire:click="editUser({{ $user->id }})"
-                                        class="p-2 text-[#a08f80] hover:text-[#8c5319] hover:bg-[#ebd9c8]/30 rounded-lg transition-all">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                        </svg>
-                                    </button>
-                                </td>
+            <div class="bg-white rounded-2xl border border-[#dcc5ae] shadow-xs overflow-hidden min-w-[800px] md:min-w-0 flex flex-col h-full">
+                <div class="flex-1 overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-[#fcf8f4] sticky top-0 z-10 border-b-2 border-[#ebd9c8]">
+                            <tr class="text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">
+                                <th class="px-6 py-5 w-20">ID</th>
+                                <th class="px-6 py-5">User Account</th>
+                                <th class="px-6 py-5">Identification</th>
+                                <th class="px-6 py-5">System Role</th>
+                                <th class="px-6 py-5 text-center">Status</th>
+                                <th class="px-6 py-5 text-right w-24">Actions</th>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-[#a08f80]">
-                                    <div class="flex flex-col items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 mb-2 opacity-50">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                                        </svg>
-                                        <p>No users found matching your criteria.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y divide-[#f5ede4]">
+                            @forelse ($users as $user)
+                                <tr class="hover:bg-[#fcf8f4]/80 transition-all duration-200 group align-top" wire:key="user-{{ $user->id }}">
+                                    <td class="px-6 py-5 text-[0.7rem] font-bold text-[#8a7663]">#{{ $user->id }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-2xl bg-[#fcf8f4] border border-[#ebd9c8] text-[#8c5319] flex items-center justify-center font-black text-xs shadow-sm transform group-hover:rotate-3 transition-transform">
+                                                {{ $user->initials() }}
+                                            </div>
+                                            <div>
+                                                <div class="text-[0.75rem] font-black text-[#2a241f] leading-tight">{{ $user->name }}</div>
+                                                <div class="text-[0.6rem] text-[#8c5319] font-bold uppercase tracking-tighter">{{ $user->email }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-[0.7rem] font-bold text-[#5c4a3b]">@ {{ $user->username }}</span>
+                                            <span class="text-[0.55rem] text-[#a08f80] uppercase tracking-widest mt-0.5">Username</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span @class([
+                                            'inline-flex items-center px-2.5 py-1 rounded-md text-[0.6rem] font-black uppercase tracking-widest',
+                                            'bg-[#8c5319] text-white' => $user->role === 'admin',
+                                            'bg-[#ebd9c8]/40 text-[#8c5319] border border-[#ebd9c8]/60' => $user->role !== 'admin'
+                                        ])>
+                                            {{ $user->role }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <button 
+                                            wire:click.stop="toggleStatus({{ $user->id }})"
+                                            wire:loading.attr="disabled"
+                                            @class([
+                                                'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.6rem] font-black uppercase tracking-widest transition-all border shadow-sm',
+                                                'bg-green-50 text-green-600 border-green-200 hover:bg-green-100' => $user->status == 1,
+                                                'bg-red-50 text-red-600 border-red-200 hover:bg-red-100' => $user->status != 1
+                                            ])>
+                                            <span @class([
+                                                'w-1.5 h-1.5 rounded-full animate-pulse',
+                                                'bg-green-500' => $user->status == 1,
+                                                'bg-red-500' => $user->status != 1
+                                            ])></span>
+                                            {{ $user->status == 1 ? 'Active' : 'Inactive' }}
+                                        </button>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button 
+                                            wire:click="editUser({{ $user->id }})"
+                                            class="p-2 text-[#a08f80] hover:text-[#8c5319] hover:bg-white rounded-xl transition-all border border-transparent hover:border-[#ebd9c8] shadow-sm hover:shadow-md">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-6 py-20 text-center text-[#a08f80]">
+                                        <div class="flex flex-col items-center max-w-xs mx-auto">
+                                            <div class="w-16 h-16 bg-[#fcf8f4] rounded-full flex items-center justify-center mb-4 border border-[#ebd9c8]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-[#dcc5ae]">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                                </svg>
+                                            </div>
+                                            <h3 class="text-sm font-bold text-[#2a241f] mb-1">No users found</h3>
+                                            <p class="text-xs text-[#a08f80]">We couldn't find any accounts matching your search or filters.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
                 
+                <!-- Professional Pagination -->
                 @if($users->hasPages())
-                    <div class="px-6 py-4 border-t border-[#f5ede4]">
-                        {{ $users->links() }}
+                    <div class="px-6 py-4 bg-[#fcf8f4] border-t border-[#ebd9c8] flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-[0.65rem] font-bold text-[#8a7663] uppercase tracking-wide bg-white px-3 py-1.5 rounded-full border border-[#dcc5ae]">
+                            Showing <span class="text-[#8c5319]">{{ $users->firstItem() ?? 0 }}</span> to <span class="text-[#8c5319]">{{ $users->lastItem() ?? 0 }}</span> of <span class="text-[#8c5319]">{{ $users->total() }}</span> entries
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            @if ($users->onFirstPage())
+                                <span class="px-4 py-2 text-[0.65rem] font-black text-[#a08f80] bg-[#f5ede4] rounded-lg cursor-not-allowed uppercase tracking-widest border border-transparent opacity-60">Previous</span>
+                            @else
+                                <button 
+                                    wire:click="previousPage" 
+                                    wire:loading.attr="disabled"
+                                    class="px-4 py-2 text-[0.65rem] font-black text-[#8c5319] bg-white border border-[#dcc5ae] rounded-lg hover:bg-[#8c5319] hover:text-white hover:border-[#8c5319] transition-all duration-200 uppercase tracking-widest shadow-sm">
+                                    Previous
+                                </button>
+                            @endif
+
+                            <div class="flex items-center gap-1 mx-2">
+                                <span class="w-8 h-8 flex items-center justify-center rounded-full bg-[#8c5319] text-white text-[0.7rem] font-black shadow-md shadow-[#8c5319]/20">
+                                    {{ $users->currentPage() }}
+                                </span>
+                                <span class="text-[0.7rem] font-bold text-[#8a7663]">of {{ $users->lastPage() }}</span>
+                            </div>
+
+                            @if ($users->hasMorePages())
+                                <button 
+                                    wire:click="nextPage" 
+                                    wire:loading.attr="disabled"
+                                    class="px-4 py-2 text-[0.65rem] font-black text-[#8c5319] bg-white border border-[#dcc5ae] rounded-lg hover:bg-[#8c5319] hover:text-white hover:border-[#8c5319] transition-all duration-200 uppercase tracking-widest shadow-sm">
+                                    Next
+                                </button>
+                            @else
+                                <span class="px-4 py-2 text-[0.65rem] font-black text-[#a08f80] bg-[#f5ede4] rounded-lg cursor-not-allowed uppercase tracking-widest border border-transparent opacity-60">Next</span>
+                            @endif
+                        </div>
                     </div>
                 @endif
             </div>

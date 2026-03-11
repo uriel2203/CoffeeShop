@@ -11,6 +11,7 @@ class Product extends Model
         'category',
         'price',
         'image_path',
+        'description',
         'is_available',
     ];
 

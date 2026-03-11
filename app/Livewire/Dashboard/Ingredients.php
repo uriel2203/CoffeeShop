@@ -15,9 +15,9 @@ class Ingredients extends Component
 
     // Form properties
     public $ingredientId = null;
-    public $name = '';
-    public $category = '';
     public $unit = '';
+    public $lowStockThreshold = 100;
+    public $criticalStockThreshold = 50;
 
     // UI state
     public $showModal = false;
@@ -49,6 +49,8 @@ class Ingredients extends Component
         $this->name = $ingredient->name;
         $this->category = $ingredient->category;
         $this->unit = $ingredient->unit;
+        $this->lowStockThreshold = $ingredient->low_stock_threshold;
+        $this->criticalStockThreshold = $ingredient->critical_stock_threshold;
         $this->showModal = true;
     }
 
@@ -61,6 +63,8 @@ class Ingredients extends Component
         $this->name = '';
         $this->category = '';
         $this->unit = '';
+        $this->lowStockThreshold = 100;
+        $this->criticalStockThreshold = 50;
     }
 
     /**
@@ -72,12 +76,16 @@ class Ingredients extends Component
             'name' => 'required|string|max:255|unique:ingredients,name,' . $this->ingredientId,
             'category' => 'required|string|max:255',
             'unit' => 'required|string|max:50',
+            'lowStockThreshold' => 'required|numeric|min:0',
+            'criticalStockThreshold' => 'required|numeric|min:0',
         ]);
 
         $data = [
             'name' => $this->name,
             'category' => $this->category,
             'unit' => $this->unit,
+            'low_stock_threshold' => $this->lowStockThreshold,
+            'critical_stock_threshold' => $this->criticalStockThreshold,
         ];
 
         // Track if this is a new ingredient to ensure default amount 0

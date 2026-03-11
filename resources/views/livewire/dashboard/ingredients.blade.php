@@ -60,68 +60,115 @@
                 </div>
             @endif
 
-            <div class="bg-white rounded-2xl border border-[#dcc5ae] shadow-sm overflow-hidden min-w-[700px] md:min-w-0">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-[#fcf8f4] border-b border-[#ebd9c8]">
-                        <tr>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Ingredient</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Category</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Amount</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Created At</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Updated At</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider text-right">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-[#f5ede4]">
-                        @forelse ($ingredients as $item)
-                            <tr class="hover:bg-[#fcf8f4]/50 transition-colors" wire:key="ing-{{ $item->id }}">
-                                <td class="px-6 py-4 text-sm text-[#8a7663]">#{{ $item->id }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-semibold text-[#2c221a]">{{ $item->name }}</div>
-                                </td>
-                                <td class="px-6 py-4 text-sm">
-                                    <span class="px-2.5 py-1 rounded-full text-[0.7rem] font-bold bg-[#ebd9c8]/50 text-[#8c5319] uppercase tracking-wide">
-                                        {{ $item->category }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm font-medium text-[#5c4a3b]">
-                                    {{ number_format($item->amount, 2) }} <span class="text-xs text-[#a08f80]">{{ $item->unit }}</span>
-                                </td>
-                                <td class="px-6 py-4 text-xs text-[#8a7663]">
-                                    {{ $item->created_at->format('M d, Y') }}
-                                </td>
-                                <td class="px-6 py-4 text-xs text-[#8a7663]">
-                                    {{ $item->updated_at->diffForHumans() }}
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button 
-                                        wire:click="editIngredient({{ $item->id }})"
-                                        class="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-md text-xs font-bold transition-all border border-blue-100">
-                                        Edit
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
+            <div class="bg-white rounded-2xl border border-[#dcc5ae] shadow-xs overflow-hidden min-w-[700px] md:min-w-0 flex flex-col h-full">
+                <div class="flex-1 overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-[#fcf8f4] sticky top-0 z-10 border-b-2 border-[#ebd9c8]">
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center text-[#a08f80]">
-                                    <div class="flex flex-col items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 mb-2 opacity-50">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-                                        </svg>
-                                        <p>No ingredients found matching your search.</p>
-                                    </div>
-                                </td>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">ID</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">Ingredient</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">Category</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">Stock Level</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">Last Updated</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em] text-right">Action</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y divide-[#f5ede4]">
+                            @forelse ($ingredients as $item)
+                                <tr class="hover:bg-[#fcf8f4]/80 transition-all duration-200 group" wire:key="ing-{{ $item->id }}">
+                                    <td class="px-6 py-4 text-xs font-bold text-[#a08f80]">#{{ str_pad($item->id, 4, '0', STR_PAD_LEFT) }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-bold text-[#2a241f] group-hover:text-[#8c5319] transition-colors">{{ $item->name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.65rem] font-black bg-[#ebd9c8]/40 text-[#8c5319] border border-[#ebd9c8]/60 uppercase tracking-tighter">
+                                            {{ $item->category }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-black text-[#2a241f]">{{ number_format($item->amount, 1) }} {{ $item->unit }}</span>
+                                            <div class="w-24 h-1.5 bg-[#f5ede4] rounded-full mt-1 overflow-hidden">
+                                                <div @class([
+                                                    'h-full rounded-full transition-all duration-500',
+                                                    'bg-red-500' => $item->amount <= ($item->critical_stock_threshold ?? 50),
+                                                    'bg-yellow-500' => $item->amount > ($item->critical_stock_threshold ?? 50) && $item->amount <= ($item->low_stock_threshold ?? 100),
+                                                    'bg-[#8c5319]' => $item->amount > ($item->low_stock_threshold ?? 100),
+                                                ]) style="width: {{ min(100, ($item->amount / (($item->low_stock_threshold ?? 100) * 2)) * 100) }}%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-[0.7rem] text-[#5c4a3b]">{{ $item->updated_at->format('M d, Y') }}</div>
+                                        <div class="text-[0.6rem] text-[#a08f80] italic">{{ $item->updated_at->diffForHumans() }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button 
+                                            wire:click="editIngredient({{ $item->id }})"
+                                            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#ebd9c8]/30 hover:bg-[#8c5319] text-[#8c5319] hover:text-white rounded-lg text-[0.7rem] font-black transition-all duration-200 border border-[#ebd9c8] hover:border-[#8c5319] group/btn shadow-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                            </svg>
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-6 py-20 text-center">
+                                        <div class="flex flex-col items-center max-w-xs mx-auto">
+                                            <div class="w-16 h-16 bg-[#fcf8f4] rounded-full flex items-center justify-center mb-4 border border-[#ebd9c8]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-[#dcc5ae]">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                                                </svg>
+                                            </div>
+                                            <h3 class="text-sm font-bold text-[#2a241f] mb-1">No ingredients found</h3>
+                                            <p class="text-xs text-[#a08f80]">Try adjusting your search criteria or add a new ingredient.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
                 
-                @if($ingredients->hasPages())
-                    <div class="px-6 py-4 border-t border-[#f5ede4]">
-                        {{ $ingredients->links() }}
+                <!-- Professional Pagination -->
+                <div class="px-6 py-4 bg-[#fcf8f4] border-t border-[#ebd9c8] flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-[0.65rem] font-bold text-[#8a7663] uppercase tracking-wide bg-white px-3 py-1.5 rounded-full border border-[#dcc5ae]">
+                        Showing <span class="text-[#8c5319]">{{ $ingredients->firstItem() ?? 0 }}</span> to <span class="text-[#8c5319]">{{ $ingredients->lastItem() ?? 0 }}</span> of <span class="text-[#8c5319]">{{ $ingredients->total() }}</span> entries
                     </div>
-                @endif
+                    
+                    <div class="flex items-center gap-2">
+                        @if ($ingredients->onFirstPage())
+                            <span class="px-4 py-2 text-[0.65rem] font-black text-[#a08f80] bg-[#f5ede4] rounded-lg cursor-not-allowed uppercase tracking-widest border border-transparent opacity-60">Previous</span>
+                        @else
+                            <button 
+                                wire:click="previousPage" 
+                                wire:loading.attr="disabled"
+                                class="px-4 py-2 text-[0.65rem] font-black text-[#8c5319] bg-white border border-[#dcc5ae] rounded-lg hover:bg-[#8c5319] hover:text-white hover:border-[#8c5319] transition-all duration-200 uppercase tracking-widest shadow-sm">
+                                Previous
+                            </button>
+                        @endif
+
+                        <div class="flex items-center gap-1 mx-2">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-[#8c5319] text-white text-[0.7rem] font-black shadow-md shadow-[#8c5319]/20">
+                                {{ $ingredients->currentPage() }}
+                            </span>
+                            <span class="text-[0.7rem] font-bold text-[#8a7663]">of {{ $ingredients->lastPage() }}</span>
+                        </div>
+
+                        @if ($ingredients->hasMorePages())
+                            <button 
+                                wire:click="nextPage" 
+                                wire:loading.attr="disabled"
+                                class="px-4 py-2 text-[0.65rem] font-black text-[#8c5319] bg-white border border-[#dcc5ae] rounded-lg hover:bg-[#8c5319] hover:text-white hover:border-[#8c5319] transition-all duration-200 uppercase tracking-widest shadow-sm">
+                                Next
+                            </button>
+                        @else
+                            <span class="px-4 py-2 text-[0.65rem] font-black text-[#a08f80] bg-[#f5ede4] rounded-lg cursor-not-allowed uppercase tracking-widest border border-transparent opacity-60">Next</span>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -217,16 +264,39 @@
                         <!-- Unit -->
                         <div class="space-y-1">
                             <label class="text-xs font-bold text-[#8a7663] uppercase tracking-wide">Unit of Measurement</label>
-                            <select wire:model="unit" class="w-full bg-[#fcf8f4] border border-[#dcc5ae] rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#8c5319] appearance-none cursor-pointer">
-                                <option value="">Select Unit</option>
-                                <option value="g">Grams (g)</option>
-                                <option value="kg">Kilograms (kg)</option>
-                                <option value="ml">Milliliters (ml)</option>
-                                <option value="L">Liters (L)</option>
-                                <option value="pcs">Pieces (pcs)</option>
-                                <option value="oz">Ounces (oz)</option>
-                            </select>
+                            <div class="relative">
+                                <select wire:model="unit" class="w-full bg-[#fcf8f4] border border-[#dcc5ae] rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#8c5319] appearance-none cursor-pointer">
+                                    <option value="">Select Unit</option>
+                                    <option value="g">Grams (g)</option>
+                                    <option value="kg">Kilograms (kg)</option>
+                                    <option value="ml">Milliliters (ml)</option>
+                                    <option value="L">Liters (L)</option>
+                                    <option value="pcs">Pieces (pcs)</option>
+                                    <option value="oz">Ounces (oz)</option>
+                                </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-[#a08f80]">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </div>
+                            </div>
                             @error('unit') <span class="text-[0.65rem] text-red-500 font-medium">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Thresholds -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-[#8a7663] uppercase tracking-wide">Low Stock Threshold</label>
+                                <input type="number" step="0.01" wire:model="lowStockThreshold" class="w-full bg-[#fcf8f4] border border-[#dcc5ae] rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#8c5319] focus:ring-1 focus:ring-[#8c5319] placeholder:text-[#a08f80]">
+                                <p class="text-[0.6rem] text-[#a08f80] italic mt-1">Status turns <span class="text-yellow-600 font-bold">Yellow</span></p>
+                                @error('lowStockThreshold') <span class="text-[0.65rem] text-red-500 font-medium">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-[#8a7663] uppercase tracking-wide">Critical Threshold</label>
+                                <input type="number" step="0.01" wire:model="criticalStockThreshold" class="w-full bg-[#fcf8f4] border border-[#dcc5ae] rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#8c5319] focus:ring-1 focus:ring-[#8c5319] placeholder:text-[#a08f80]">
+                                <p class="text-[0.6rem] text-[#a08f80] italic mt-1">Status turns <span class="text-red-600 font-bold">Red</span></p>
+                                @error('criticalStockThreshold') <span class="text-[0.65rem] text-red-500 font-medium">{{ $message }}</span> @enderror
+                            </div>
                         </div>
 
                         <div class="pt-4 flex gap-3">

@@ -45,73 +45,119 @@
                 </div>
             @endif
 
-            <div class="bg-white rounded-2xl border border-[#dcc5ae] shadow-sm overflow-hidden min-w-[800px] md:min-w-0">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-[#fcf8f4] border-b border-[#ebd9c8]">
-                        <tr>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider text-center">ID</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Ingredient</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Amount</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider hidden md:table-cell">Batch Expiry</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider">Date Added</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider text-right">Updated At</th>
-                            <th class="px-6 py-4 text-xs font-bold text-[#8a7663] uppercase tracking-wider text-right">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-[#f5ede4]">
-                        @forelse ($inventoryHistory as $index => $item)
-                            <tr class="hover:bg-[#fcf8f4]/50 transition-colors" wire:key="inv-{{ $item->name }}">
-                                <td class="px-6 py-4 text-sm text-[#8a7663] text-center">{{ $inventoryHistory->firstItem() + $index }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-semibold text-[#2c221a]">{{ $item->name }}</div>
-                                    <div class="text-[0.65rem] text-[#a08f80] uppercase tracking-wider">{{ $item->category }}</div>
-                                </td>
-                                <td class="px-6 py-4 text-sm font-bold text-[#2a241f]">
-                                    {{ number_format($item->total_amount, 2) }} <span class="text-xs text-[#8a7663]">{{ $item->unit }}</span>
-                                </td>
-                                <td class="px-6 py-4 text-sm hidden md:table-cell">
-                                    @if($item->latest_expiry)
-                                        <span class="px-2 py-0.5 rounded text-[0.7rem] {{ \Carbon\Carbon::parse($item->latest_expiry)->isPast() ? 'bg-red-50 text-red-600' : 'bg-slate-50 text-slate-600' }}">
-                                            {{ \Carbon\Carbon::parse($item->latest_expiry)->format('F d, Y') }}
-                                        </span>
-                                    @else
-                                        <span class="text-[#a08f80] italic text-xs">No Expiry</span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 text-xs text-[#8a7663]">
-                                    {{ $item->last_added ? $item->last_added->format('Y-m-d H:i:s') : 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 text-xs text-[#8a7663] text-right">
-                                    {{ $item->last_updated ? $item->last_updated->diffForHumans() : 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button 
-                                        wire:click="editSummarized('{{ $item->name }}')"
-                                        class="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-md text-xs font-bold transition-all border border-blue-100">
-                                        Edit
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
+            <div class="bg-white rounded-2xl border border-[#dcc5ae] shadow-xs overflow-hidden min-w-[800px] md:min-w-0 flex flex-col h-full">
+                <div class="flex-1 overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-[#fcf8f4] sticky top-0 z-10 border-b-2 border-[#ebd9c8]">
                             <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-[#a08f80]">
-                                    <div class="flex flex-col items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 mb-2 opacity-50">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0016.5 4.5h-8.25a2.25 2.25 0 00-2.25 2.25V18a2.25 2.25 0 002.25 2.25h8.25" />
-                                        </svg>
-                                        <p>No inventory logs found matching your criteria.</p>
-                                    </div>
-                                </td>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em] text-center w-16">ID</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">Ingredient</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">Stock Amount</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em] hidden md:table-cell">Batch Expiry</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em]">Last Status</th>
+                                <th class="px-6 py-5 text-[0.65rem] font-black text-[#5c4a3b] uppercase tracking-[0.1em] text-right">Action</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y divide-[#f5ede4]">
+                            @forelse ($inventoryHistory as $index => $item)
+                                <tr class="hover:bg-[#fcf8f4]/80 transition-all duration-200 group" wire:key="inv-{{ $item->name }}">
+                                    <td class="px-6 py-4 text-xs font-bold text-[#a08f80] text-center">#{{ str_pad($inventoryHistory->firstItem() + $index, 4, '0', STR_PAD_LEFT) }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-bold text-[#2a241f] group-hover:text-[#8c5319] transition-colors uppercase tracking-tight">{{ $item->name }}</div>
+                                        <div class="text-[0.6rem] font-black text-[#8c5319]/60 uppercase tracking-widest mt-0.5">{{ $item->category }}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-black text-[#2a241f]">{{ number_format($item->total_amount, 1) }} {{ $item->unit }}</span>
+                                            <div class="text-[0.65rem] text-[#a08f80] italic">Current Total</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        @if($item->latest_expiry)
+                                            <span @class([
+                                                'inline-flex items-center px-2.5 py-1 rounded-lg text-[0.65rem] font-black border uppercase tracking-tighter',
+                                                'bg-red-50 text-red-600 border-red-100' => \Carbon\Carbon::parse($item->latest_expiry)->isPast(),
+                                                'bg-green-50 text-green-600 border-green-100' => !\Carbon\Carbon::parse($item->latest_expiry)->isPast(),
+                                            ])>
+                                                {{ \Carbon\Carbon::parse($item->latest_expiry)->format('M d, Y') }}
+                                            </span>
+                                        @else
+                                            <span class="text-[#a08f80] italic text-[0.7rem] font-medium opacity-60">No Expiry Tracked</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col">
+                                            <div class="text-[0.7rem] font-bold text-[#5c4a3b]">{{ $item->last_added ? $item->last_added->format('M d, g:i A') : 'N/A' }}</div>
+                                            <div class="text-[0.6rem] text-[#a08f80] italic">{{ $item->last_updated ? $item->last_updated->diffForHumans() : 'N/A' }}</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button 
+                                            wire:click="editSummarized('{{ $item->name }}')"
+                                            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#ebd9c8]/30 hover:bg-[#8c5319] text-[#8c5319] hover:text-white rounded-lg text-[0.7rem] font-black transition-all duration-200 border border-[#ebd9c8] hover:border-[#8c5319] group/btn shadow-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-[#8c5319] group-hover/btn:text-white">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                            </svg>
+                                            Adjust
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-6 py-20 text-center">
+                                        <div class="flex flex-col items-center max-w-xs mx-auto">
+                                            <div class="w-16 h-16 bg-[#fcf8f4] rounded-full flex items-center justify-center mb-4 border border-[#ebd9c8]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-[#dcc5ae]">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0016.5 4.5h-8.25a2.25 2.25 0 00-2.25 2.25V18a2.25 2.25 0 002.25 2.25h8.25" />
+                                                </svg>
+                                            </div>
+                                            <h3 class="text-sm font-bold text-[#2a241f] mb-1">No logs found</h3>
+                                            <p class="text-xs text-[#a08f80]">Try searching for a different ingredient or record a new stock entry.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
                 
-                @if($inventoryHistory->hasPages())
-                    <div class="px-6 py-4 border-t border-[#f5ede4]">
-                        {{ $inventoryHistory->links() }}
+                <!-- Professional Pagination -->
+                <div class="px-6 py-4 bg-[#fcf8f4] border-t border-[#ebd9c8] flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-[0.65rem] font-bold text-[#8a7663] uppercase tracking-wide bg-white px-3 py-1.5 rounded-full border border-[#dcc5ae]">
+                        Showing <span class="text-[#8c5319]">{{ $inventoryHistory->firstItem() ?? 0 }}</span> to <span class="text-[#8c5319]">{{ $inventoryHistory->lastItem() ?? 0 }}</span> of <span class="text-[#8c5319]">{{ $inventoryHistory->total() }}</span> entries
                     </div>
-                @endif
+                    
+                    <div class="flex items-center gap-2">
+                        @if ($inventoryHistory->onFirstPage())
+                            <span class="px-4 py-2 text-[0.65rem] font-black text-[#a08f80] bg-[#f5ede4] rounded-lg cursor-not-allowed uppercase tracking-widest border border-transparent opacity-60">Previous</span>
+                        @else
+                            <button 
+                                wire:click="previousPage" 
+                                wire:loading.attr="disabled"
+                                class="px-4 py-2 text-[0.65rem] font-black text-[#8c5319] bg-white border border-[#dcc5ae] rounded-lg hover:bg-[#8c5319] hover:text-white hover:border-[#8c5319] transition-all duration-200 uppercase tracking-widest shadow-sm">
+                                Previous
+                            </button>
+                        @endif
+
+                        <div class="flex items-center gap-1 mx-2">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-[#8c5319] text-white text-[0.7rem] font-black shadow-md shadow-[#8c5319]/20">
+                                {{ $inventoryHistory->currentPage() }}
+                            </span>
+                            <span class="text-[0.7rem] font-bold text-[#8a7663]">of {{ $inventoryHistory->lastPage() }}</span>
+                        </div>
+
+                        @if ($inventoryHistory->hasMorePages())
+                            <button 
+                                wire:click="nextPage" 
+                                wire:loading.attr="disabled"
+                                class="px-4 py-2 text-[0.65rem] font-black text-[#8c5319] bg-white border border-[#dcc5ae] rounded-lg hover:bg-[#8c5319] hover:text-white hover:border-[#8c5319] transition-all duration-200 uppercase tracking-widest shadow-sm">
+                                Next
+                            </button>
+                        @else
+                            <span class="px-4 py-2 text-[0.65rem] font-black text-[#a08f80] bg-[#f5ede4] rounded-lg cursor-not-allowed uppercase tracking-widest border border-transparent opacity-60">Next</span>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </main>
